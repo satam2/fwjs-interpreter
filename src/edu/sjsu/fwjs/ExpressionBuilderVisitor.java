@@ -78,8 +78,6 @@ public class ExpressionBuilderVisitor extends FeatherweightJavaScriptBaseVisitor
         return visit(ctx.stat());
     }
 
-    // THE CODE BELOW CAN BE MODIFIED
-
     @Override
     public Expression visitWhile(FeatherweightJavaScriptParser.WhileContext ctx) {
         Expression cond = visit(ctx.expr());
