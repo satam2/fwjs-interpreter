@@ -51,24 +51,26 @@ stat: expr SEPARATOR                                    # bareExpr
     | IF '(' expr ')' block                             # ifThen
     | WHILE '(' expr ')' stat                           # while
     | PRINT '(' expr ')' SEPARATOR                      # print
-    | block                                             # blockExpr
+    | '{' stat* '}'                                     # blockExpr
     ;
 
 block: '{' stat* '}'                                    # fullBlock
+     | stat                                             # simpBlock
      ;
 
-expr: ID ASSIGN expr                                    # assign
-    | VAR ID (ASSIGN expr)?                             # varDecl
-    | expr op=(LT | LE | GT | GE | EQ) expr             # Compare
-    | expr op=('+' | '-') expr                          # AddSub
-    | expr op=( '*' | '/' | '%' ) expr                  # MulDivMod
+expr: '(' expr ')'                                      # parens
     | expr '(' argList? ')'                             # call
     | FUNCTION '(' paramList? ')' block                 # func
     | INT                                               # int
     | BOOL                                              # bool
     | NULL                                              # null
     | ID                                                # id
-    | '(' expr ')'                                      # parens
+    | '{' stat* '}'                                     # blockVal
+    | expr op=( '*' | '/' | '%' ) expr                  # MulDivMod
+    | expr op=('+' | '-') expr                          # AddSub
+    | expr op=(LT | LE | GT | GE | EQ) expr             # Compare
+    | ID ASSIGN expr                                    # assign
+    | VAR ID (ASSIGN expr)?                             # varDecl
     ;
 
 paramList: ID (',' ID)*

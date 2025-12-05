@@ -103,7 +103,7 @@ class BinOpExpr implements Expression {
             case LE:
                 return new BoolVal(((IntVal) left).toInt() <= ((IntVal) right).toInt());
             case EQ:
-                return new BoolVal(((IntVal) left).toInt() == ((IntVal) right).toInt());
+                return new BoolVal(left.equals(right));
         }
         return new NullVal();
     }
@@ -131,8 +131,10 @@ class IfExpr implements Expression {
 
         if (((BoolVal) cv).toBoolean())
             return thn.evaluate(env);
-        else
+        else if (els != null)
             return els.evaluate(env);
+        else
+            return new NullVal();
     }
 }
 
@@ -193,7 +195,7 @@ class VarDeclExpr implements Expression {
     }
 
     public Value evaluate(Environment env) {
-        Value e = exp.evaluate(env);
+        Value e = (exp == null) ? new NullVal() : exp.evaluate(env);
         env.createVar(varName, e);
         return e;
     }
